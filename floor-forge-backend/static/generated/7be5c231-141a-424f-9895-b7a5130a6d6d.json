@@ -1,0 +1,11 @@
+{
+    "prompt": "A spacious three-bedroom house with two bathrooms and a large backyard",
+    "enhanced_prompt": "Floor plan of A spacious three-bedroom house with two bathrooms and a large backyard, 2D architectural drawing, top-down view, blueprint style, clean lines, architectural floor plan, labeled rooms, professional drawing",
+    "negative_prompt": "3D, perspective, isometric, realistic, photo, furniture, decoration, people, color, texture, shadows",
+    "num_inference_steps": 50,
+    "guidance_scale": 7.5,
+    "seed": 615414,
+    "generation_time": 507.91619634628296,
+    "output_path": "static/generated\\7be5c231-141a-424f-9895-b7a5130a6d6d.png",
+    "timestamp": "2025-05-21_14-21-41"
+}

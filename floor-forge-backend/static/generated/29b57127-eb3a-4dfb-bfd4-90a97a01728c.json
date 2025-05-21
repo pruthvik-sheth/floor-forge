@@ -1,0 +1,13 @@
+{
+    "prompt": "A floor plan with one living room, one kitchen, and two bedrooms.",
+    "processed_prompt": "A floor plan with one living room, one kitchen, and two bedrooms., modern architectural style, 2D architectural drawing, clean lines, professional blueprint style",
+    "negative_prompt": "3D, realistic, photograph, perspective, isometric, furniture, color, people, blurry, low quality, cropped",
+    "num_inference_steps": 50,
+    "guidance_scale": 7.5,
+    "seed": 290639,
+    "width": 512,
+    "height": 512,
+    "generation_time": 479.90707898139954,
+    "output_path": "static/generated\\29b57127-eb3a-4dfb-bfd4-90a97a01728c.png",
+    "timestamp": "2025-05-21_11-16-07"
+}
