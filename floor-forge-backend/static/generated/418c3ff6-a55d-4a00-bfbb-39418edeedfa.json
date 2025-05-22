@@ -1,0 +1,9 @@
+{
+    "prompt": "A floor plan with spacious living room and three bedrooms and one kitchen",
+    "num_inference_steps": 50,
+    "guidance_scale": 7.5,
+    "seed": 257227,
+    "generation_time": 14.211626768112183,
+    "output_path": "static/generated\\418c3ff6-a55d-4a00-bfbb-39418edeedfa.png",
+    "timestamp": "2025-05-21_18-17-24"
+}

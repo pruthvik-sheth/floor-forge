@@ -1,0 +1,9 @@
+{
+    "prompt": "A modern floor plan with one-bedroom apartment with an open kitchen and living room",
+    "num_inference_steps": 50,
+    "guidance_scale": 7.5,
+    "seed": 912160,
+    "generation_time": 26.001006603240967,
+    "output_path": "static/generated\\7a6741be-3e7f-42ca-b47b-439879edb3be.png",
+    "timestamp": "2025-05-21_19-54-16"
+}

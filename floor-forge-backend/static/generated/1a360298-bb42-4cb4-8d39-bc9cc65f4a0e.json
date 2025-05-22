@@ -1,0 +1,9 @@
+{
+    "prompt": "A floor plan with spacious three-bedroom house with two bathrooms and a large backyard",
+    "num_inference_steps": 50,
+    "guidance_scale": 7.5,
+    "seed": 41126,
+    "generation_time": 11.349340915679932,
+    "output_path": "static/generated\\1a360298-bb42-4cb4-8d39-bc9cc65f4a0e.png",
+    "timestamp": "2025-05-21_18-20-50"
+}

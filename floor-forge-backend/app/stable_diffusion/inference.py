@@ -12,13 +12,14 @@ import uuid
 import logging
 import torch
 from flask import current_app
-
-# Import from within the application
-from app.stable_diffusion.model_loader import get_pipeline
+from diffusers import StableDiffusionPipeline
 from app.utils.helpers import ensure_directory, save_json, generate_timestamp
 
 # Configure logging
 logger = logging.getLogger(__name__)
+
+# Global variable to store the pipeline
+_pipeline = None
 
 def load_model():
     """
@@ -27,6 +28,8 @@ def load_model():
     Returns:
         bool: True if loaded successfully
     """
+    global _pipeline
+    
     try:
         # Get the pipeline path from configuration
         pipeline_path = current_app.config.get("PIPELINE_PATH")
@@ -36,25 +39,67 @@ def load_model():
         logger.info(f"Attempting to load model from: {pipeline_path}")
         logger.info(f"Fallback model ID: {base_model_id}")
         
-        # Try to load the pipeline
-        pipeline = get_pipeline(
-            pipeline_path=pipeline_path,
-            model_id=base_model_id
+        # Check if pipeline exists
+        if not os.path.exists(pipeline_path):
+            logger.warning(f"Custom model not found at {pipeline_path}, falling back to {base_model_id}")
+            model_path = base_model_id
+        else:
+            logger.info(f"Found custom model at {pipeline_path}")
+            model_path = pipeline_path
+        
+        # Check device
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        logger.info(f"Using device: {device}")
+        
+        # Set dtype based on device
+        dtype = torch.float16 if device == "cuda" else torch.float32
+        
+        # Load the pipeline
+        _pipeline = StableDiffusionPipeline.from_pretrained(
+            model_path,
+            torch_dtype=dtype,
+            safety_checker=None
         )
         
-        # If we get here, the pipeline was loaded successfully
-        return pipeline is not None
+        # Move to device
+        _pipeline = _pipeline.to(device)
+        
+        # Apply basic optimizations
+        if device == "cuda":
+            _pipeline.enable_attention_slicing()
+            # Try to enable xformers if available
+            try:
+                _pipeline.enable_xformers_memory_efficient_attention()
+                logger.info("Enabled xformers memory efficient attention")
+            except:
+                logger.info("Xformers not available, using default attention")
+        
+        logger.info("Pipeline loaded successfully!")
+        return True
     except Exception as e:
         logger.error(f"Error loading model: {e}")
         return False
+
+def get_pipeline():
+    """
+    Get the loaded pipeline or load it if not already loaded.
+    
+    Returns:
+        StableDiffusionPipeline: The loaded pipeline
+    """
+    global _pipeline
+    
+    if _pipeline is None:
+        load_model()
+    
+    return _pipeline
 
 def generate_floor_plan(
     prompt,
     output_filename=None,
     num_inference_steps=None,
     guidance_scale=None,
-    seed=None,
-    enhance_prompt_flag=False  # Set default to False to match Colab
+    seed=None
 ):
     """
     Generate a floor plan from a text prompt.
@@ -65,7 +110,6 @@ def generate_floor_plan(
         num_inference_steps (int, optional): Number of inference steps
         guidance_scale (float, optional): Guidance scale for generation
         seed (int, optional): Random seed for reproducibility
-        enhance_prompt_flag (bool): Whether to enhance the prompt
         
     Returns:
         tuple: (image_path, generation_time)
@@ -79,7 +123,7 @@ def generate_floor_plan(
     
     # Set output filename if not provided
     if output_filename is None:
-        output_filename = f"floor_plan_{uuid.uuid4()}.png"
+        output_filename = f"{uuid.uuid4()}.png"
     
     # Ensure the output directory exists
     output_dir = current_app.config.get("GENERATED_IMAGES_DIR")
@@ -89,14 +133,15 @@ def generate_floor_plan(
     output_path = os.path.join(output_dir, output_filename)
     
     try:
+        # Log the generation attempt
+        logger.info(f"Generating floor plan with prompt: '{prompt}'")
+        logger.info(f"Using {num_inference_steps} inference steps and guidance scale {guidance_scale}")
+        
         # Start the timer
         start_time = time.time()
         
         # Make sure the model is loaded
         pipeline = get_pipeline()
-        
-        # Generate the image - use exactly the same approach as your Colab notebook
-        logger.info(f"Generating floor plan for: '{prompt}'")
         
         # Set up generator if seed provided
         if seed is not None:
@@ -105,13 +150,12 @@ def generate_floor_plan(
             generator = None
         
         # Generate image
-        with torch.no_grad():
-            result = pipeline(
-                prompt=prompt,
-                num_inference_steps=num_inference_steps,
-                guidance_scale=guidance_scale,
-                generator=generator
-            )
+        result = pipeline(
+            prompt=prompt,
+            num_inference_steps=num_inference_steps,
+            guidance_scale=guidance_scale,
+            generator=generator
+        )
         
         # Get image from result
         image = result.images[0]

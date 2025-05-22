@@ -1,0 +1,9 @@
+{
+    "prompt": "A floor plan with small living but 3 big bedrooms and one kitchen",
+    "num_inference_steps": 50,
+    "guidance_scale": 7.5,
+    "seed": 287966,
+    "generation_time": 11.490972757339478,
+    "output_path": "static/generated\\8d5aa522-28f5-4d8b-ac7d-2635a86ba835.png",
+    "timestamp": "2025-05-21_18-19-28"
+}

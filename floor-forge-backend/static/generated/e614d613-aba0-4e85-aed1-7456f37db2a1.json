@@ -1,0 +1,9 @@
+{
+    "prompt": "A floor plan with a spacious living room and a balcony along with one bedroom and a kitchen\n",
+    "num_inference_steps": 50,
+    "guidance_scale": 7.5,
+    "seed": 342310,
+    "generation_time": 15.942532300949097,
+    "output_path": "static/generated\\e614d613-aba0-4e85-aed1-7456f37db2a1.png",
+    "timestamp": "2025-05-21_19-16-01"
+}

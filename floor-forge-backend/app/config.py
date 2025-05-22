@@ -19,7 +19,7 @@ class BaseConfig:
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max upload size
     
     # Model settings
-    MODEL_BASE_DIR = os.getenv("MODEL_BASE_DIR", "models")
+    MODEL_BASE_DIR = os.getenv("MODEL_BASE_DIR", "app/models")
     PIPELINE_PATH = os.getenv("PIPELINE_PATH", os.path.join(MODEL_BASE_DIR, "floor_plan_model"))
     BASE_MODEL_ID = "stabilityai/stable-diffusion-2-1-base"  # Fallback model if custom model not found
     

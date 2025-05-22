@@ -1,9 +1,0 @@
-{
-    "prompt": "A floor plan with a large living room, open kitchen, three bedrooms, and two bathrooms.",
-    "num_inference_steps": 10,
-    "guidance_scale": 7.5,
-    "seed": 701405,
-    "generation_time": 170.56491613388062,
-    "output_path": "static/generated\\125bf378-aa56-436b-90fd-8d573b7976fd.png",
-    "timestamp": "2025-05-21_15-54-21"
-}
